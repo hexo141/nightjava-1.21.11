@@ -3,7 +3,6 @@ package com.nj.mixin;
 import com.nj.NativeLoader;
 import com.nj.particle.ParticleNativeLib;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.world.ClientWorld;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,8 +19,7 @@ import java.nio.FloatBuffer;
 public abstract class ParticleMixin {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("nightjava-particle-mixin");
-    private static final int BATCH_SIZE = 512;
-    private static final int STRIDE = 10;
+    private static final int STRIDE = 12;
 
     private static FloatBuffer nativeBuffer;
     private static int bufferCapacity = 0;
@@ -29,7 +27,7 @@ public abstract class ParticleMixin {
     private static long lastLogTime = 0;
 
     private static synchronized void ensureBufferCapacity() {
-        int required = BATCH_SIZE * STRIDE;
+        int required = STRIDE * 4;
         if (nativeBuffer == null || bufferCapacity < required) {
             bufferCapacity = required;
             nativeBuffer = ByteBuffer.allocateDirect(required * 4)
@@ -44,10 +42,8 @@ public abstract class ParticleMixin {
             return;
         }
 
-        ParticleMixin accessor = (ParticleMixin)(Object)this;
-
-        if (accessor.getAge() >= accessor.getMaxAge()) {
-            accessor.setDead(true);
+        if (this.age >= this.maxAge) {
+            this.dead = true;
             ci.cancel();
             return;
         }
@@ -63,36 +59,47 @@ public abstract class ParticleMixin {
             tickCount = 0;
         }
 
-        nativeBuffer.put(0, (float)accessor.getX());
-        nativeBuffer.put(1, (float)accessor.getY());
-        nativeBuffer.put(2, (float)accessor.getZ());
-        nativeBuffer.put(3, (float)accessor.getVelocityX());
-        nativeBuffer.put(4, (float)accessor.getVelocityY());
-        nativeBuffer.put(5, (float)accessor.getVelocityZ());
-        nativeBuffer.put(6, this.gravityStrength);
-        nativeBuffer.put(7, this.velocityMultiplier);
-        nativeBuffer.put(8, accessor.getAge());
-        nativeBuffer.put(9, accessor.getMaxAge());
+        nativeBuffer.put(0, (float)this.lastX);
+        nativeBuffer.put(1, (float)this.lastY);
+        nativeBuffer.put(2, (float)this.lastZ);
+        nativeBuffer.put(3, (float)this.x);
+        nativeBuffer.put(4, (float)this.y);
+        nativeBuffer.put(5, (float)this.z);
+        nativeBuffer.put(6, (float)this.velocityX);
+        nativeBuffer.put(7, (float)this.velocityY);
+        nativeBuffer.put(8, (float)this.velocityZ);
+        nativeBuffer.put(9, this.gravityStrength);
+        nativeBuffer.put(10, this.velocityMultiplier);
+        nativeBuffer.put(11, this.age);
 
-        boolean success = ParticleNativeLib.tickSingleParticle(nativeBuffer);
+        boolean success = ParticleNativeLib.tickSingleParticleFull(nativeBuffer);
 
         if (success) {
-            accessor.setX(nativeBuffer.get(0));
-            accessor.setY(nativeBuffer.get(1));
-            accessor.setZ(nativeBuffer.get(2));
-            accessor.setVelocityX(nativeBuffer.get(3));
-            accessor.setVelocityY(nativeBuffer.get(4));
-            accessor.setVelocityZ(nativeBuffer.get(5));
-            accessor.setAge((int)nativeBuffer.get(8));
+            this.lastX = nativeBuffer.get(0);
+            this.lastY = nativeBuffer.get(1);
+            this.lastZ = nativeBuffer.get(2);
+            this.x = nativeBuffer.get(3);
+            this.y = nativeBuffer.get(4);
+            this.z = nativeBuffer.get(5);
+            this.velocityX = nativeBuffer.get(6);
+            this.velocityY = nativeBuffer.get(7);
+            this.velocityZ = nativeBuffer.get(8);
+            this.age = (int)nativeBuffer.get(11);
 
-            if (accessor.getAge() >= accessor.getMaxAge()) {
-                accessor.setDead(true);
+            if (this.age >= this.maxAge) {
+                this.dead = true;
             }
 
             ci.cancel();
         }
     }
 
+    @Shadow(remap = false)
+    protected double lastX;
+    @Shadow(remap = false)
+    protected double lastY;
+    @Shadow(remap = false)
+    protected double lastZ;
     @Shadow(remap = false)
     protected double x;
     @Shadow(remap = false)
@@ -115,23 +122,4 @@ public abstract class ParticleMixin {
     protected float velocityMultiplier;
     @Shadow(remap = false)
     protected boolean dead;
-
-    public double getX() { return x; }
-    public double getY() { return y; }
-    public double getZ() { return z; }
-    public double getVelocityX() { return velocityX; }
-    public double getVelocityY() { return velocityY; }
-    public double getVelocityZ() { return velocityZ; }
-    public int getAge() { return age; }
-    public int getMaxAge() { return maxAge; }
-    public boolean isDead() { return dead; }
-
-    public void setX(double v) { x = v; }
-    public void setY(double v) { y = v; }
-    public void setZ(double v) { z = v; }
-    public void setVelocityX(double v) { velocityX = v; }
-    public void setVelocityY(double v) { velocityY = v; }
-    public void setVelocityZ(double v) { velocityZ = v; }
-    public void setAge(int v) { age = v; }
-    public void setDead(boolean v) { dead = v; }
 }

@@ -2,6 +2,56 @@
 #include <cmath>
 
 extern "C" {
+    JNIEXPORT jboolean JNICALL Java_com_nj_particle_ParticleNativeLib_tickSingleParticleFull(
+        JNIEnv* env, jclass clazz,
+        jobject buffer) {
+
+        float* data = (float*)env->GetDirectBufferAddress(buffer);
+        if (data == nullptr) return JNI_FALSE;
+
+        float lastX = data[0];
+        float lastY = data[1];
+        float lastZ = data[2];
+        float x = data[3];
+        float y = data[4];
+        float z = data[5];
+        float vx = data[6];
+        float vy = data[7];
+        float vz = data[8];
+        float gravity = data[9];
+        float multiplier = data[10];
+        int age = (int)data[11];
+
+        float newX = x;
+        float newY = y;
+        float newZ = z;
+
+        vy -= 0.04f * gravity;
+
+        vx *= multiplier;
+        vy *= multiplier;
+        vz *= multiplier;
+
+        newX += vx;
+        newY += vy;
+        newZ += vz;
+
+        age++;
+
+        data[0] = newX;
+        data[1] = newY;
+        data[2] = newZ;
+        data[3] = newX;
+        data[4] = newY;
+        data[5] = newZ;
+        data[6] = vx;
+        data[7] = vy;
+        data[8] = vz;
+        data[11] = (float)age;
+
+        return JNI_TRUE;
+    }
+
     JNIEXPORT jboolean JNICALL Java_com_nj_particle_ParticleNativeLib_tickSingleParticle(
         JNIEnv* env, jclass clazz,
         jobject buffer) {

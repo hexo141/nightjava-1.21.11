@@ -10,8 +10,10 @@ accessible field net/minecraft/client/particle/Particle velocityX D
 accessible field net/minecraft/client/particle/Particle velocityY D
 accessible field net/minecraft/client/particle/Particle velocityZ D
 accessible field net/minecraft/client/particle/Particle age I
+accessible field net/minecraft/client/particle/Particle maxAge I
 accessible field net/minecraft/client/particle/Particle gravityStrength F
 accessible field net/minecraft/client/particle/Particle velocityMultiplier F
+accessible field net/minecraft/client/particle/Particle dead Z
 accessible field net/minecraft/client/particle/BillboardParticle red F
 accessible field net/minecraft/client/particle/BillboardParticle green F
 accessible field net/minecraft/client/particle/BillboardParticle blue F
