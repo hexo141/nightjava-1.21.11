@@ -2,7 +2,7 @@
 #include <cmath>
 
 extern "C" {
-    JNIEXPORT jboolean JNICALL Java_com_nj_particle_ParticleNativeLib_tickSingleParticleFull(
+    JNIEXPORT jboolean JNICALL Java_com_nj_particle_ParticleNativeLib_tickSingleParticle(
         JNIEnv* env, jclass clazz,
         jobject buffer) {
 
@@ -19,76 +19,32 @@ extern "C" {
         float vy = data[7];
         float vz = data[8];
         float gravity = data[9];
-        float multiplier = data[10];
-        int age = (int)data[11];
-
-        float newX = x;
-        float newY = y;
-        float newZ = z;
 
         vy -= 0.04f * gravity;
 
-        vx *= multiplier;
-        vy *= multiplier;
-        vz *= multiplier;
+        vx *= 0.98f;
+        vy *= 0.98f;
+        vz *= 0.98f;
 
-        newX += vx;
-        newY += vy;
-        newZ += vz;
+        float newX = x + vx;
+        float newY = y + vy;
+        float newZ = z + vz;
 
-        age++;
-
-        data[0] = newX;
-        data[1] = newY;
-        data[2] = newZ;
-        data[3] = newX;
-        data[4] = newY;
-        data[5] = newZ;
-        data[6] = vx;
-        data[7] = vy;
-        data[8] = vz;
-        data[11] = (float)age;
-
-        return JNI_TRUE;
-    }
-
-    JNIEXPORT jboolean JNICALL Java_com_nj_particle_ParticleNativeLib_tickSingleParticle(
-        JNIEnv* env, jclass clazz,
-        jobject buffer) {
-
-        float* data = (float*)env->GetDirectBufferAddress(buffer);
-        if (data == nullptr) return JNI_FALSE;
-
-        float x = data[0];
-        float y = data[1];
-        float z = data[2];
-        float vx = data[3];
-        float vy = data[4];
-        float vz = data[5];
-        float gravity = data[6];
-        float multiplier = data[7];
-        int age = (int)data[8];
-        int maxAge = (int)data[9];
-
-        vy -= 0.04f * gravity;
-
-        vx *= multiplier;
-        vy *= multiplier;
-        vz *= multiplier;
-
-        x += vx;
-        y += vy;
-        z += vz;
-
-        age++;
-
-        data[0] = x;
-        data[1] = y;
-        data[2] = z;
-        data[3] = vx;
-        data[4] = vy;
-        data[5] = vz;
-        data[8] = (float)age;
+        data[0] = lastX;
+        data[1] = lastY;
+        data[2] = lastZ;
+        data[3] = x;
+        data[4] = y;
+        data[5] = z;
+        data[6] = x;
+        data[7] = y;
+        data[8] = z;
+        data[9] = newX;
+        data[10] = newY;
+        data[11] = newZ;
+        data[12] = vx;
+        data[13] = vy;
+        data[14] = vz;
 
         return JNI_TRUE;
     }

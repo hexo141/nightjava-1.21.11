@@ -35,10 +35,6 @@ object ParticleNativeLib {
         buffer: FloatBuffer
     ): Boolean
 
-    @JvmStatic external fun tickSingleParticleFull(
-        buffer: FloatBuffer
-    ): Boolean
-
     @JvmStatic external fun computeBillboardVertices(
         particlePositions: FloatArray,
         particleSizes: FloatArray,
