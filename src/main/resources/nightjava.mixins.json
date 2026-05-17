@@ -1,0 +1,19 @@
+{
+	"required": true,
+	"package": "com.nj.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"ExampleMixin"
+	],
+	"client": [
+		"ParticleMixin",
+		"ParticleManagerMixin",
+		"BillboardParticleRendererMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

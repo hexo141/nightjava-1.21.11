@@ -1,0 +1,19 @@
+accessWidener v2 named
+
+accessible field net/minecraft/client/particle/Particle x D
+accessible field net/minecraft/client/particle/Particle y D
+accessible field net/minecraft/client/particle/Particle z D
+accessible field net/minecraft/client/particle/Particle lastX D
+accessible field net/minecraft/client/particle/Particle lastY D
+accessible field net/minecraft/client/particle/Particle lastZ D
+accessible field net/minecraft/client/particle/Particle velocityX D
+accessible field net/minecraft/client/particle/Particle velocityY D
+accessible field net/minecraft/client/particle/Particle velocityZ D
+accessible field net/minecraft/client/particle/Particle age I
+accessible field net/minecraft/client/particle/Particle gravityStrength F
+accessible field net/minecraft/client/particle/Particle velocityMultiplier F
+accessible field net/minecraft/client/particle/BillboardParticle red F
+accessible field net/minecraft/client/particle/BillboardParticle green F
+accessible field net/minecraft/client/particle/BillboardParticle blue F
+accessible field net/minecraft/client/particle/BillboardParticle alpha F
+accessible field net/minecraft/client/particle/BillboardParticle scale F
