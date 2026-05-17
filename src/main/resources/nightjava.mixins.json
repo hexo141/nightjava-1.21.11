@@ -3,7 +3,9 @@
 	"package": "com.nj.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+		"ExampleMixin",
+		"ChunkPalettedStorageFixMixin",
+		"ChunkHeightAndBiomeFixMixin"
 	],
 	"client": [
 		"ParticleMixin",

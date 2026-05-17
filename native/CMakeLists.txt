@@ -12,6 +12,7 @@ add_library(nightjava-particles SHARED
     src/particle_native.cpp
     src/particle_physics.cpp
     src/particle_render.cpp
+    src/datafixer_native.cpp
 )
 
 target_include_directories(nightjava-particles PRIVATE
@@ -22,7 +23,7 @@ target_include_directories(nightjava-particles PRIVATE
 if(MSVC)
     target_compile_options(nightjava-particles PRIVATE /O2)
 else()
-    target_compile_options(nightjava-particles PRIVATE -O3 -msse4.1)
+    target_compile_options(nightjava-particles PRIVATE -O3 -msse4.1 -mavx2)
 endif()
 
 set_target_properties(nightjava-particles PROPERTIES

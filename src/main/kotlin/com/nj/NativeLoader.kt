@@ -1,5 +1,6 @@
 package com.nj
 
+import com.nj.datafixer.DataFixerNative
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.file.Files
@@ -58,9 +59,25 @@ object NativeLoader {
             System.load(outputFile.absolutePath)
             isLoaded = true
             logger.info("Native particle library loaded successfully from: ${outputFile.absolutePath}")
+
+            verifyDataFixerNative()
         } catch (e: Exception) {
             isLoaded = false
             logger.warn("Failed to load native particle library, falling back to Java calculations: ${e.message}")
+        }
+    }
+
+    private fun verifyDataFixerNative() {
+        try {
+            DataFixerNative::class.java.getDeclaredMethod(
+                "convertChunkPalette",
+                LongArray::class.java, Array::class.java, IntArray::class.java, Int::class.javaPrimitiveType
+            )
+            DataFixerNative.isAvailable = true
+            logger.info("DataFixer native acceleration enabled")
+        } catch (e: Exception) {
+            DataFixerNative.isAvailable = false
+            logger.warn("DataFixer native methods not available: ${e.message}")
         }
     }
 }
