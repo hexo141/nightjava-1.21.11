@@ -1,8 +1,27 @@
-package com.nj.particle;
+package com.nj.particle
 
-import java.nio.FloatBuffer;
+import java.nio.ByteBuffer
+import java.nio.FloatBuffer
 
 object ParticleNativeLib {
+    @JvmStatic external fun getOrCreateNativeBuffer(minParticleCount: Int): ByteBuffer
+    @JvmStatic external fun getNativeBufferCapacity(): Int
+    @JvmStatic external fun tickAllParticlesInPlace(particleCount: Int): Boolean
+
+    @JvmStatic external fun computeCameraRelativePositions(
+        vertexBuffer: FloatBuffer, particleCount: Int, vertexStride: Int,
+        camX: Float, camY: Float, camZ: Float,
+        rotX: Float, rotY: Float, rotZ: Float, rotW: Float,
+        tickDelta: Float
+    ): Boolean
+
+    @JvmStatic external fun computeBillboardVerticesNative(
+        vertexBuffer: FloatBuffer, particleCount: Int, vertexStride: Int,
+        camX: Float, camY: Float, camZ: Float,
+        rotX: Float, rotY: Float, rotZ: Float, rotW: Float,
+        tickDelta: Float
+    ): Boolean
+
     @JvmStatic external fun batchTickParticles(
         positions: FloatArray,
         velocities: FloatArray,

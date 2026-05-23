@@ -12,7 +12,6 @@ add_library(nightjava-particles SHARED
     src/particle_native.cpp
     src/particle_physics.cpp
     src/particle_render.cpp
-    src/datafixer_native.cpp
 )
 
 target_include_directories(nightjava-particles PRIVATE
