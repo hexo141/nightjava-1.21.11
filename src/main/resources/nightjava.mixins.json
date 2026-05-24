@@ -3,14 +3,19 @@
 	"package": "com.nj.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+		"ExampleMixin",
+		"LivingEntityCrammingMixin",
+		"ChunkNibbleArrayMixin",
+		"ChunkLightProviderMixin"
 	],
 	"client": [
 		"ParticleMixin",
 		"ParticleAccessor",
 		"ParticleManagerAccessor",
 		"ParticleRendererMixin",
-		"BillboardParticleRendererMixin"
+		"BillboardParticleRendererMixin",
+		"FrustumAccessor",
+		"WorldRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

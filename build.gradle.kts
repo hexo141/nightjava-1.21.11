@@ -65,7 +65,13 @@ tasks.processResources {
 	}
 }
 
+tasks.compileJava {
+	dependsOn(tasks.compileKotlin)
+}
+
 tasks.withType<JavaCompile>().configureEach {
+	if (name != "compileJava") return@configureEach
+	dependsOn(tasks.compileKotlin)
 	options.release = 21
 }
 

@@ -34,9 +34,9 @@ object NativeLoader {
                 }
             }
 
-            val libName = if (os.contains("win")) "nightjava-particles.dll"
-            else if (os.contains("mac")) "libnightjava-particles.dylib"
-            else "libnightjava-particles.so"
+            val libName = if (os.contains("win")) "nightjava-client.dll"
+            else if (os.contains("mac")) "libnightjava-client.dylib"
+            else "libnightjava-client.so"
 
             val resourcePath = "/$platformDir/$libName"
             val inputStream = NativeLoader::class.java.getResourceAsStream(resourcePath)
